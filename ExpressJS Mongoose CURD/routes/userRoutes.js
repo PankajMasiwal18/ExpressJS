@@ -33,7 +33,8 @@ router.post('/', (req, res) => {
     var userData = new user_Model({
         Name: req.body.name,
         City: req.body.city,
-        Age: req.body.age
+        Age: req.body.age,
+        user_id: req.body.user_id,
     })
     userData.save()
         .then(result => {
@@ -50,7 +51,8 @@ router.put('/:id',(req,res)=>{
     var userData = {
         Name: req.body.name,
         City: req.body.city,
-        Age: req.body.age
+        Age: req.body.age,
+        user_id: req.body.user_id
     }
 
     user_Model.findByIdAndUpdate({_id: req.params.id},{ $set: userData })
