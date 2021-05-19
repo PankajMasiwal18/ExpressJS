@@ -4,76 +4,100 @@ const router = express.Router();
 var { user_Model } = require('../models/user_Model');
 
 
-router.get('/', (req, res) => {
-    user_Model.find()
-        .then(data => {
-            res.status(200).json({ x: data })
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err })
-        })
+router.get('/', async (req, res) => {
+    try{
+        const result = await user_Model.find();
+        res.status(200).send(result);
+    }
+    catch(err)
+    {
+        res.status(500).send(err);
+    }
 })
 
-router.get('/:id', (req, res) => {
+router.get('/lookup', async (req, res) => {
+    try
+    {
+        await user_Model.aggregate([
+            { 
+                $lookup: 
+                { 
+                    from: "emp_details",
+                    localField: "user_id",  
+                    foreignField: "Emp_id", 
+                    as: "user_emp"
+                } 
+            }
+         ])
+    }
+    catch(err)
+    {
+        res.status(500).json({ error: err })
+    }
+})
+
+
+router.get('/:id', async (req, res) => {
     var id = req.params.id;
 
-    user_Model.findById(id)
-        .then(data => {
-            res.status(200).json({ x: data })
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err })
-        })
+    try
+    {
+        const  result = await user_Model.findById(id);
+        res.status(200).send(result);
+    }
+    catch(err) 
+    {
+        res.status(500).send(err)
+    }
 })
 
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     var userData = new user_Model({
         Name: req.body.name,
         City: req.body.city,
         Age: req.body.age,
         user_id: req.body.user_id,
     })
-    userData.save()
-        .then(result => {
-            return res.json({ message: "success" });
-        })
-        .catch(err => {
-            res.status(500).json({ err })
-        })
+    try
+    {
+        const user = await userData.save();
+        res.status(201).json({ message: "success" });
+    }
+    catch(err)
+    {
+        res.status(500).json({ err })
+    }
 })
 
-router.put('/:id',(req,res)=>{
-    var id = req.params.id;
-
+router.put('/:id', async (req,res)=>{
+  
     var userData = {
         Name: req.body.name,
         City: req.body.city,
         Age: req.body.age,
         user_id: req.body.user_id
     }
-
-    user_Model.findByIdAndUpdate({_id: req.params.id},{ $set: userData })
-    .then(result=>{
-        res.status(200).json({status:"Successfully Updated"})
-    })
-    .catch(err=>{
-        res.status(500).json({err})
-    })
+    try
+    {
+        const updatedData = await user_Model.findByIdAndUpdate({_id: req.params.id},{ $set: userData },{new:true});
+        res.status(200).send(updatedData);
+    }
+    catch(err){
+        res.status(500).send(err)
+    }
 })
 
-router.delete('/:id',(req,res)=>{
-    var id = req.params.id;
-
-    user_Model.findByIdAndDelete(id)
-    .then(result=>{
-        res.status(200).json({status:"Successfully Deleted"})
-    })
-    .catch(err=>{
-        res.status(500).json({err})
-    })
+router.delete('/:id', async (req,res)=>{
+    try
+    {
+        await user_Model.findByIdAndDelete(req.params.id);
+        res.status(200).send("Successfully Deleted");
+    }
+    catch(err)
+    {
+        res.status(500).send(err);
+    }
 })
 
 

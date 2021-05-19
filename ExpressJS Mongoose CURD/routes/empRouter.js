@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 
 var { emp_Model } = require('../models/emp_Model');
-var { user_Model } = require('../models/emp_Model');
-
 
 router.get('/', (req, res) => {
     emp_Model.aggregate([
@@ -11,8 +9,8 @@ router.get('/', (req, res) => {
             $lookup: 
             { 
                 from: "user_details",
-                localField: "Emp_id",
-                foreignField: "user_id",
+                localField: "Emp_id",  //primary key of emp_detail
+                foreignField: "user_id", 
                 as: "user_emp"
             } 
         }
@@ -44,21 +42,21 @@ router.get('/', (req, res) => {
 })
 
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     var empData = new emp_Model({
         Department: req.body.dpt,
         Post: req.body.post,
         Emp_id: req.body.id
     })
-    empData.save()
-        .then(result => {
-            return res.json({ message: "success" });
-        })
-        .catch(err => {
-            res.status(500).json({ err })
-        })
+    try
+    {
+        const result = await empData.save();
+        res.status(200).send(result);
+    }
+    catch(err)
+    {
+        res.status(500).send(err)
+    }
 })
-
-
 
 module.exports = router;
