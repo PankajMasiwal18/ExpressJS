@@ -3,7 +3,7 @@ var { user_Model } = require('../models/user_Model');
 module.exports.all_User_Detail = async (req, res) => {
     try{
         const result = await user_Model.find();
-        res.status(200).send(result);
+        res.status(200).send(result);   
     }
     catch(err)
     {
@@ -28,7 +28,7 @@ module.exports.user_Id_Detail =async (req, res) => {
 
 
 module.exports.add_User_Detail = async (req, res) => {
-    var userData = new user_Model({
+    var userData = new user_Model({           
         Name: req.body.name,
         City: req.body.city,
         Age: req.body.age,
@@ -41,7 +41,7 @@ module.exports.add_User_Detail = async (req, res) => {
     }
     catch(err)
     {
-        res.status(500).json({ err })
+        res.status(500).send(err)
     }
 }
 
@@ -49,7 +49,7 @@ module.exports.add_User_Detail = async (req, res) => {
 
 module.exports.update_User_Detail = async (req,res)=>{
   
-    var userData = {
+    var userData = {  
         Name: req.body.name,
         City: req.body.city,
         Age: req.body.age,
@@ -97,6 +97,6 @@ module.exports.lookup =async (req, res) => {
     }
     catch(err)
     {
-        res.status(500).json({ error: err })
+        res.status(500).send(err);
     }
 }

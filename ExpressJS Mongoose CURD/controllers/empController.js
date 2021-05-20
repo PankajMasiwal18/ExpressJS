@@ -1,6 +1,5 @@
 var { emp_Model } = require('../models/emp_Model');
 
-
 module.exports.lookup = async (req, res) => {
     try
     {
@@ -43,7 +42,7 @@ module.exports.lookup = async (req, res) => {
 
 
 module.exports.all_Emp_Detail = async (req, res) => {
-    var empData = new emp_Model({
+    var empData = new emp_Model({    
         Department: req.body.dpt,
         Post: req.body.post,
         Emp_id: req.body.id

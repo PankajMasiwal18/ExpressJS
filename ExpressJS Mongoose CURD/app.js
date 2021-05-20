@@ -19,6 +19,3 @@ app.use('/Emp',Emp)
 app.listen(3000,()=>{
     console.log("server is working");
 });
-
-
-
