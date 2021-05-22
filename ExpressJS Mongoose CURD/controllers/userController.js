@@ -1,9 +1,11 @@
 var { user_Model } = require('../models/user_Model');
+var axios_get = require('./axiosContoller');
 
 module.exports.all_User_Detail = async (req, res) => {
     try{
         const result = await user_Model.find();
         res.status(200).send(result);   
+        axios_get()
     }
     catch(err)
     {
@@ -100,3 +102,4 @@ module.exports.lookup =async (req, res) => {
         res.status(500).send(err);
     }
 }
+
