@@ -5,7 +5,7 @@ module.exports.getLocation = async (req, res) => {
 
     try {
         const result = await location_Model.find({
-            location: { $near: { $geometry: { type: "Point", coordinates: [Number(req.query.long) , Number(req.query.lat)] }, $minDistance: 0, $maxDistance: 1000000} }
+            location: { $near: { $geometry: { type: "Point", coordinates: [Number(req.query.long) , Number(req.query.lat)] }, $minDistance: 0, $maxDistance: 100000} }
             // minDistance and maxDistance take meter as argument
         });
         res.status(200).send(result);
