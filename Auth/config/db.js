@@ -8,12 +8,12 @@ mongoose.connect(process.env.DB_KEY, {
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true
-  })
-.then((result)=>{
-    console.log("Database is connected.");
 })
-.catch((err)=>{
-    console.log("error" , err);
-})
+    .then((result) => {
+        console.log("Database is connected.");
+    })
+    .catch((err) => {
+        console.log("error", err);
+    })
 
 module.exports = mongoose;
